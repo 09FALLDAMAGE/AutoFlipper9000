@@ -1,0 +1,113 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 10.256743421052631,
+        "y": 1.359786184210526
+      },
+      "prevControl": null,
+      "nextControl": {
+<<<<<<<< HEAD:src/main/deploy/pathplanner/paths/RedBallPath.path
+        "x": 6.677467105263157,
+        "y": 1.840871710526315
+========
+        "x": 1.9114049137172215,
+        "y": 5.615324021868652
+>>>>>>>> main:src/main/deploy/pathplanner/paths/New Path.path
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+<<<<<<<< HEAD:src/main/deploy/pathplanner/paths/RedBallPath.path
+        "x": 16.318421052631578,
+        "y": 2.793421052631579
+      },
+      "prevControl": {
+        "x": 16.238906111381354,
+        "y": 0.12525302401291594
+      },
+      "nextControl": {
+        "x": 16.405016447368418,
+        "y": 5.699177631578946
+========
+        "x": 1.726089743589743,
+        "y": 2.6523717948717946
+      },
+      "prevControl": {
+        "x": 1.0061107125678257,
+        "y": 3.985699489439164
+      },
+      "nextControl": {
+        "x": 2.4312346915243825,
+        "y": 1.3465153084251789
+>>>>>>>> main:src/main/deploy/pathplanner/paths/New Path.path
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+<<<<<<<< HEAD:src/main/deploy/pathplanner/paths/RedBallPath.path
+        "x": 15.433223684210525,
+        "y": 6.9018914473684205
+      },
+      "prevControl": {
+        "x": 16.587828947368426,
+        "y": 6.055180921052632
+========
+        "x": 6.130479452054795,
+        "y": 1.5683005136986299
+      },
+      "prevControl": {
+        "x": 4.825433394297939,
+        "y": 0.3678178383457542
+      },
+      "nextControl": {
+        "x": 7.687323765964216,
+        "y": 3.0004067722948324
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.978141025641025,
+        "y": 7.0
+      },
+      "prevControl": {
+        "x": 6.1446871110506125,
+        "y": 5.560208388987801
+>>>>>>>> main:src/main/deploy/pathplanner/paths/New Path.path
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
