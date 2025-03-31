@@ -96,6 +96,7 @@ def save_auto(data, output_file):
 if __name__ == "__main__":
     command_folder_path = "autos"
     print("Current project path: " + default_project_path)
+    print("Change this by editing the first line in the python file.")
     command_file = input("Enter Auto Name: ")  # JSON file containing path names
     with open(os.path.join(default_project_path, command_folder_path, command_file + ".auto"), 'r') as file:
         command_data = json.load(file)
@@ -152,6 +153,6 @@ if __name__ == "__main__":
         else:
             print(f"File {file_name} not found in paths folder.")
 
-    flipped_commands_file = f"{command_prefix}{command_file}{command_suffix}.auto"
+    flipped_commands_file = f"{command_prefix}{command_suffix}.auto"
     save_auto(flipped_commands, flipped_commands_file)
     print(f"Flipped commands file saved to {flipped_commands_file}")
