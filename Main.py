@@ -54,7 +54,7 @@ def reflect_points(json_data, ref_x, ref_y, reflect_x=True, reflect_y=True, refl
                         waypoint[key]["y"] = 2 * ref_y - waypoint[key]["y"]
 
     # Reflect rotation across y-axis
-    if reflect_rotation_x:
+    if reflect_rotation_y:
         for state_key in ["idealStartingState", "goalEndState"]:
             if state_key in reflected_data and "rotation" in reflected_data[state_key]:
                 reflected_data[state_key]["rotation"] = -reflected_data[state_key]["rotation"]
@@ -65,15 +65,15 @@ def reflect_points(json_data, ref_x, ref_y, reflect_x=True, reflect_y=True, refl
                     rotation_target["rotationDegrees"] = -rotation_target["rotationDegrees"]
 
     # # Reflect rotation across y-axis
-    # if reflect_rotation_x:
-    #     for state_key in ["idealStartingState", "goalEndState"]:
-    #         if state_key in reflected_data and "rotation" in reflected_data[state_key]:
-    #             reflected_data[state_key]["rotation"] = -reflected_data[state_key]["rotation"]
-    #
-    #     if "rotationTargets" in reflected_data:
-    #         for rotation_target in reflected_data["rotationTargets"]:
-    #             if "rotationDegrees" in rotation_target:
-    #                 rotation_target["rotationDegrees"] = -rotation_target["rotationDegrees"]
+    if reflect_rotation_x:
+        for state_key in ["idealStartingState", "goalEndState"]:
+            if state_key in reflected_data and "rotation" in reflected_data[state_key]:
+                reflected_data[state_key]["rotation"] = -((reflected_data[state_key]["rotation"] + 180) % 360)
+
+        if "rotationTargets" in reflected_data:
+            for rotation_target in reflected_data["rotationTargets"]:
+                if "rotationDegrees" in rotation_target:
+                    rotation_target["rotationDegrees"] = -((rotation_target["rotationDegrees"] + 180) % 360)
 
     return reflected_data
 
