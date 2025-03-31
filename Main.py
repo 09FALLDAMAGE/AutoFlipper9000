@@ -1,7 +1,17 @@
 import json
 import os
 
-default_project_path = "C:\\Programming\\Reefscape\\src\\main\\deploy\\pathplanner"
+SETTINGS_FILE = "settings.json"
+
+def load_settings():
+    if os.path.exists(SETTINGS_FILE):
+        with open(SETTINGS_FILE, 'r') as file:
+            return json.load(file)
+    return {"default_project_path": "C:\\Programming\\Reefscape\\src\\main\\deploy\\pathplanner"}
+
+def save_settings(settings):
+    with open(SETTINGS_FILE, 'w') as file:
+        json.dump(settings, file, indent=4)
 
 def load_json(file_name):
     folder_path = "paths"  # Folder where JSON files are stored
@@ -94,9 +104,16 @@ def save_auto(data, output_file):
 
 
 if __name__ == "__main__":
+    settings = load_settings()
+    default_project_path = settings["default_project_path"]
+
+    if input(f"Current project path: {default_project_path}\nDo you want to change it? (y/n): ").strip().lower() == "y":
+        default_project_path = input("Enter new project path: ").strip()
+        settings["default_project_path"] = default_project_path
+        save_settings(settings)
+
+
     command_folder_path = "autos"
-    print("Current project path: " + default_project_path)
-    print("Change this by editing the first line in the python file.")
     command_file = input("Enter Auto Name: ")  # JSON file containing path names
     with open(os.path.join(default_project_path, command_folder_path, command_file + ".auto"), 'r') as file:
         command_data = json.load(file)
