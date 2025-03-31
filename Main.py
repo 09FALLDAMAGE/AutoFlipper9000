@@ -84,8 +84,8 @@ def save_auto(data, output_file):
 
 if __name__ == "__main__":
     command_folder_path = "autos"
-    command_file = input("Enter Auto Name: ") + ".auto"  # JSON file containing path names
-    with open(os.path.join(command_folder_path, command_file), 'r') as file:
+    command_file = input("Enter Auto Name: ")  # JSON file containing path names
+    with open(os.path.join(command_folder_path, command_file + ".auto"), 'r') as file:
         command_data = json.load(file)
 
     path_names = extract_path_names(command_data)
