@@ -1,10 +1,11 @@
 import json
 import os
 
+default_project_path = "C:\\Programming\\Reefscape\\src\\main\\deploy\\pathplanner"
 
 def load_json(file_name):
     folder_path = "paths"  # Folder where JSON files are stored
-    file_path = os.path.join(folder_path, file_name)
+    file_path = os.path.join(default_project_path, folder_path, file_name)
     with open(file_path, 'r') as file:
         data = json.load(file)
     return data
@@ -80,22 +81,23 @@ def reflect_points(json_data, ref_x, ref_y, reflect_x=True, reflect_y=True, refl
 
 def save_json(data, output_file):
     folder_path = "paths"
-    file_path = os.path.join(folder_path, output_file)
+    file_path = os.path.join(default_project_path, folder_path, output_file)
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
 
 def save_auto(data, output_file):
     folder_path = "autos"
-    file_path = os.path.join(folder_path, output_file)
+    file_path = os.path.join(default_project_path, folder_path, output_file)
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
 
 if __name__ == "__main__":
     command_folder_path = "autos"
+    print("Current project path: " + default_project_path)
     command_file = input("Enter Auto Name: ")  # JSON file containing path names
-    with open(os.path.join(command_folder_path, command_file + ".auto"), 'r') as file:
+    with open(os.path.join(default_project_path, command_folder_path, command_file + ".auto"), 'r') as file:
         command_data = json.load(file)
 
     path_names = extract_path_names(command_data)
@@ -111,9 +113,6 @@ if __name__ == "__main__":
     reflect_rotation_y = input("Reflect rotation fields across Y axis? (y/n): ").strip().lower() == "y"
     reflect_rotation_x = input("Reflect rotation fields across X axis? (y/n): ").strip().lower() == "y"
 
-    reflect_rotation = input("Reflect rotation fields? (y/n): ").strip().lower() == "y"
-    reflect_rotation_degrees = input("Reflect rotationDegrees fields? (y/n): ").strip().lower() == "y"
-
     prefix = input("Enter prefix for new paths: ").strip()
     suffix = input("Enter suffix for new paths: ").strip()
     command_prefix = input("Enter prefix for flipped commands file: ").strip()
@@ -125,11 +124,11 @@ if __name__ == "__main__":
         file_name = f"{path_name}.path"
         output_file = f"{prefix}{path_name}{suffix}.path"
 
-        if os.path.exists(os.path.join("paths", file_name)):
+        if os.path.exists(os.path.join(default_project_path, "paths", file_name)):
             json_data = load_json(file_name)
             deltas = find_deltas(json_data, ref_x, ref_y)
-            reflected_data = reflect_points(json_data, ref_x, ref_y, reflect_x, reflect_y, reflect_rotation,
-                                            reflect_rotation_degrees)
+            reflected_data = reflect_points(json_data, ref_x, ref_y, reflect_x, reflect_y, reflect_rotation_y,
+                                            reflect_rotation_x)
             save_json(reflected_data, output_file)
 
             for entry in deltas:
