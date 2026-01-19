@@ -30,7 +30,10 @@ class App(customtkinter.CTk):
         self.folder_input_label.grid(row=2, column=0, padx=20, pady=(10, 0))
 
         if self.backend.getDefaultProjectDir() != "":
+
             self.project_label = customtkinter.CTkLabel(self.sidebar_frame, text=os.path.basename(self.backend.getDefaultProjectDir()), anchor="w", text_color="orange")
+            if len(self.backend.getPaths()) > 0:
+                self.project_label.configure(text_color="#17e321")
         else:
             self.project_label = customtkinter.CTkLabel(self.sidebar_frame, text="Not Selected", anchor="w", text_color="red")
 
@@ -78,10 +81,11 @@ class App(customtkinter.CTk):
                 self.auton_widgets.append(switch)
                 iterator += 1
         else:
-            self.no_items_label = customtkinter.CTkLabel(self.auto_scrollable_frame, text="No Autos\n \nLoad the base folder\nof your robot project",
+            self.project_label.configure(text_color="orange")
+            self.no_autos_label = customtkinter.CTkLabel(self.auto_scrollable_frame, text="No Autos\n \nLoad the base folder\nof your robot project",
                                                      font=customtkinter.CTkFont(size=20, weight="bold"))
-            self.no_items_label.grid(row=0, column=1, padx=10, pady=(20, 10))
-            self.auton_widgets.append(self.no_items_label)
+            self.no_autos_label.grid(row=0, column=1, padx=10, pady=(20, 10))
+            self.auton_widgets.append(self.no_autos_label)
 
         if len(self.backend.getPaths()) > 0:
             iterator = 0
@@ -91,10 +95,11 @@ class App(customtkinter.CTk):
                 self.auton_widgets.append(switch)
                 iterator += 1
         else:
-            self.no_items_label = customtkinter.CTkLabel(self.path_scrollable_frame, text="No Autos\n \nLoad the base folder\nof your robot project",
+            self.project_label.configure(text_color="orange")
+            self.no_paths_label = customtkinter.CTkLabel(self.path_scrollable_frame, text="No Paths\n \nLoad the base folder\nof your robot project",
                                                      font=customtkinter.CTkFont(size=20, weight="bold"))
-            self.no_items_label.grid(row=0, column=1, padx=10, pady=(20, 10))
-            self.auton_widgets.append(self.no_items_label)
+            self.no_paths_label.grid(row=0, column=1, padx=10, pady=(20, 10))
+            self.auton_widgets.append(self.no_paths_label)
 
         self.entry = customtkinter.CTkEntry(self, placeholder_text="Search")
         self.entry.grid(row=3, column=1, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
@@ -119,12 +124,13 @@ class App(customtkinter.CTk):
                 self.auton_widgets.append(switch)
                 iterator += 1
         else:
+            self.project_label.configure(text_color="orange")
             for widget in self.auton_widgets:
                 widget.destroy()
-            self.no_items_label = customtkinter.CTkLabel(self.auto_scrollable_frame, text="No Autos\n \nLoad the base folder\nof your robot project",
+            self.no_autos_label = customtkinter.CTkLabel(self.auto_scrollable_frame, text="No Autos\n \nLoad the base folder\nof your robot project",
                                                      font=customtkinter.CTkFont(size=20, weight="bold"))
-            self.no_items_label.grid(row=0, column=1, padx=10, pady=(20, 10))
-            self.auton_widgets.append(self.no_items_label)
+            self.no_autos_label.grid(row=0, column=1, padx=10, pady=(20, 10))
+            self.auton_widgets.append(self.no_autos_label)
 
         if len(self.backend.getPaths()) > 0:
             for widget in self.path_widgets:
@@ -133,15 +139,16 @@ class App(customtkinter.CTk):
             for path in self.backend.getPaths():
                 switch = customtkinter.CTkSwitch(master=self.path_scrollable_frame, text=f"{path}")
                 switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
-                self.auton_widgets.append(switch)
+                self.path_widgets.append(switch)
                 iterator += 1
         else:
+            self.project_label.configure(text_color="orange")
             for widget in self.path_widgets:
                 widget.destroy()
-            self.no_items_label = customtkinter.CTkLabel(self.path_scrollable_frame, text="No Paths\n \nLoad the base folder\nof your robot project",
+            self.no_paths_label = customtkinter.CTkLabel(self.path_scrollable_frame, text="No Paths\n \nLoad the base folder\nof your robot project",
                                                      font=customtkinter.CTkFont(size=20, weight="bold"))
-            self.no_items_label.grid(row=0, column=1, padx=10, pady=(20, 10))
-            self.auton_widgets.append(self.no_items_label)
+            self.no_paths_label.grid(row=0, column=1, padx=10, pady=(20, 10))
+            self.path_widgets.append(self.no_paths_label)
 
 
 

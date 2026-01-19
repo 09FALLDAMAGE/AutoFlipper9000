@@ -3,7 +3,6 @@ import os
 
 class jsonInterpreter:
     def __init__(self):
-        # C:\\Users\\mayaj\\Robotics\\Reefscape\\src\\main\\deploy\\pathplanner
         self.working_directory = ""
         self.auto_names = []
         self.path_names = []
@@ -12,7 +11,6 @@ class jsonInterpreter:
     def getAutos(self):
         if self.working_directory is not None:
             auto_directory = os.path.join(self.working_directory, "src\\main\\deploy\\pathplanner", "autos")
-            print(auto_directory)
             if os.path.isdir(auto_directory):
                 for f in os.listdir(auto_directory):
                     if ".auto" in f:
@@ -27,7 +25,6 @@ class jsonInterpreter:
     def getPaths(self):
         if self.working_directory is not None:
             path_directory = os.path.join(self.working_directory, "src\\main\\deploy\\pathplanner", "paths")
-            print(path_directory)
             if os.path.isdir(path_directory):
                 for f in os.listdir(path_directory):
                     if ".path" in f:
@@ -41,6 +38,9 @@ class jsonInterpreter:
 
     def setWorkingDirectory(self, directory):
         self.working_directory = directory
+        settings = {"default_project_path": directory}
+        with open(self.SETTINGS_FILE, 'w') as file:
+            json.dump(settings, file, indent=4)
 
     def getDefaultProjectDir(self):
         if os.path.exists(self.SETTINGS_FILE):
