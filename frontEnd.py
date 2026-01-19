@@ -3,6 +3,7 @@ from customtkinter import filedialog
 import os
 from jsonInterpreter import jsonInterpreter
 import webbrowser
+from datetime import datetime
 
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("blue")
@@ -274,7 +275,21 @@ class App(customtkinter.CTk):
             else: # no autos
                 return
 
-        self.search_items(None)
+            self.search_items(None)
+        else: # flip paths
+            paths_to_flip = []
+            for path_widget in self.path_widgets:
+                if path_widget.get() == 1:
+                    paths_to_flip.append(path_widget.cget("text"))
+
+            if len(paths_to_flip) > 0:
+                for path in paths_to_flip:
+                    path_name_entry = customtkinter.CTkInputDialog(text=f"What should the new name of path {path} be?",
+                                                               title="Flipping, 67%")
+                    path_name = path_name_entry.get_input()
+                    if path_name is None or path_name == "":
+                        path_name = "flipped" + datetime.now() + path
+                    self.backend.flip_path(path, path_name, flipx, flipy, fliprotx, fliproty)
 
 
 

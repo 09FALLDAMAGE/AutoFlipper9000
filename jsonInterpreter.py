@@ -181,3 +181,23 @@ class jsonInterpreter:
                         rotation_target["rotationDegrees"] = -((rotation_target["rotationDegrees"] + 180) % 360)
 
         return reflected_data
+
+
+    def flip_path(self, path_in, new_path_name, reflect_x=True, reflect_y=True, reflect_rotation_y=True,
+                   reflect_rotation_x=True):
+
+
+        file_name = f"{path_in}.path"
+        output_file = f"{new_path_name}.path"
+
+        if os.path.exists(os.path.join(self.working_directory, "src\\main\\deploy\\pathplanner\\paths", file_name)):
+            json_data = self.load_json(file_name)
+            deltas = self.find_deltas(json_data, self.ref_x, self.ref_y)
+            reflected_data = self.reflect_points(json_data, self.ref_x, self.ref_y, reflect_x, reflect_y, reflect_rotation_x, reflect_rotation_y)
+
+            self.save_json(reflected_data, output_file)
+
+            for entry in deltas:
+                print(
+                    f"Point: {entry['point']}, X: {entry['x']}, Y: {entry['y']}, Delta X: {entry['delta_x']:.2f}, Delta Y: {entry['delta_y']:.2f}")
+            print(f"Reflected data saved to {output_file}")
