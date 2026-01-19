@@ -241,33 +241,39 @@ class App(customtkinter.CTk):
 
             if len(autons_to_flip) == 1: # single auto
                 auto_name_entry = customtkinter.CTkInputDialog(text="What should the name of the new auto be?",
-                                                         title="Flipping, 30%")
+                                                         title="Flipping, 67%")
                 auto_name = auto_name_entry.get_input()
                 if auto_name is None or auto_name == "":
                     return
 
-                path_prefix_entry = customtkinter.CTkInputDialog(text="Enter new path prefix", title="Flipping, 60%")
+                path_prefix_entry = customtkinter.CTkInputDialog(text="Enter new path prefix", title="Flipping, HOT%")
                 path_prefix = path_prefix_entry.get_input()
                 if path_prefix is None or path_prefix == "":
                     return
 
-                # command_name_entry = customtkinter.CTkInputDialog(text="Enter new command file prefix", title="Flipping, 90%")
-                # command_name = command_name_entry.get_input()
-                # if command_name is None or command_name == "":
-                #     return
 
                 self.backend.flip(autons_to_flip[0], auto_name,flipx, flipy, fliprotx, fliproty, path_prefix)
 
             elif len(autons_to_flip) > 1: # multiple autos
-                auto_name = customtkinter.CTkInputDialog(
-                    text="You are flipping multiple autos\nEnter a prefix for the new autos", title="Flipping, 30%")
-                print(auto_name.get_input())
-                path_prefix = customtkinter.CTkInputDialog(text="Enter new path prefix", title="Flipping, 60%")
-                command_name = customtkinter.CTkInputDialog(text="Enter new command file prefix", title="Flipping, 90%")
+                auto_name_entry = customtkinter.CTkInputDialog(
+                                            text="You are flipping multiple autos\nEnter a prefix for the new autos",
+                                            title="Flipping, 67%")
+                auto_name = auto_name_entry.get_input()
+                if auto_name is None or auto_name == "":
+                    return
+
+                path_prefix_entry = customtkinter.CTkInputDialog(text="Enter new path prefix", title="Flipping, HOT%")
+                path_prefix = path_prefix_entry.get_input()
+                if path_prefix is None or path_prefix == "":
+                    return
+
+                for auton in autons_to_flip:
+                    self.backend.flip(auton, auto_name + auton, flipx, flipy, fliprotx, fliproty, path_prefix)
+
 
             else: # no autos
                 return
-            
+
         self.search_items(None)
 
 
