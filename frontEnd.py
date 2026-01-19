@@ -230,6 +230,8 @@ class App(customtkinter.CTk):
     def flip(self):
         flipx = self.x_switch.get()
         flipy = self.y_switch.get()
+        fliprotx = self.x_rotation_switch.get()
+        fliproty = self.y_rotation_switch.get()
         if self.tabview.get() == "Autos":
             if True: # single auto
                 auto_name_entry = customtkinter.CTkInputDialog(text="What should the name of the new auto be?",
@@ -243,10 +245,12 @@ class App(customtkinter.CTk):
                 if path_prefix is None or path_prefix == "":
                     return
 
-                command_name_entry = customtkinter.CTkInputDialog(text="Enter new command file prefix", title="Flipping, 90%")
-                command_name = command_name_entry.get_input()
-                if command_name is None or command_name == "":
-                    return
+                # command_name_entry = customtkinter.CTkInputDialog(text="Enter new command file prefix", title="Flipping, 90%")
+                # command_name = command_name_entry.get_input()
+                # if command_name is None or command_name == "":
+                #     return
+
+                self.backend.flip("autoname",flipx, flipy, fliprotx, fliproty, path_prefix)
 
             elif False: # multiple autos
                 auto_name = customtkinter.CTkInputDialog(

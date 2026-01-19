@@ -47,6 +47,12 @@ class jsonInterpreter:
         with open(self.SETTINGS_FILE, 'w') as file:
             json.dump(settings, file, indent=4)
 
+    def save_auto(self, data, output_file):
+        folder_path = "autos"
+        file_path = os.path.join(self.working_directory, folder_path, output_file)
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=4)
+
     def getDefaultProjectDir(self):
         if os.path.exists(self.SETTINGS_FILE):
             with open(self.SETTINGS_FILE, 'r') as file:
@@ -55,8 +61,77 @@ class jsonInterpreter:
         else:
             return ""
 
-    def reflect_points(self, json_data, ref_x, ref_y, reflect_x=True, reflect_y=True, reflect_rotation_y=True,
-                   reflect_rotation_x=True):
+    def save_json(self, data, output_file):
+        folder_path = "paths"
+        file_path = os.path.join(self.working_directory, folder_path, output_file)
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=4)
+
+    def extract_path_names(self, command_data):
+        path_names = set()
+        if isinstance(command_data, dict):
+            if "type" in command_data and command_data["type"] == "path" and "data" in command_data and "pathName" in \
+                    command_data["data"]:
+                path_names.add(command_data["data"]["pathName"])
+            for key, value in command_data.items():
+                path_names.update(self.extract_path_names(value))
+        elif isinstance(command_data, list):
+            for item in command_data:
+                path_names.update(self.extract_path_names(item))
+        return path_names
+
+    def load_json(self, file_name):
+        folder_path = "paths"  # Folder where JSON files are stored
+        file_path = os.path.join(self.working_directory, folder_path, file_name)
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+        return data
+
+    def flip(self, auto_name, reflect_x=True, reflect_y=True, reflect_rotation_y=True,
+                   reflect_rotation_x=True, path_prefix = ""):
+        with open(os.path.join(self.working_directory, "autos", auto_name), 'r') as file:
+            command_data = json.load(file)
+
+        flipped_commands = command_data.copy()
+
+        path_names = self.extract_path_names(command_data)
+        for path_name in path_names:
+            file_name = f"{path_name}.path"
+            output_file = f"{path_prefix}{path_name}.path"
+
+            if os.path.exists(os.path.join(self.working_directory, "paths", file_name)):
+                json_data = self.load_json(file_name)
+                deltas = self.find_deltas(json_data, self.ref_x, self.ref_y)
+                reflected_data = self.reflect_points(json_data, self.ref_x, self.ref_y, reflect_x, reflect_y, reflect_rotation_x, reflect_rotation_y)
+
+                self.save_json(reflected_data, output_file)
+
+                for entry in deltas:
+                    print(
+                        f"Point: {entry['point']}, X: {entry['x']}, Y: {entry['y']}, Delta X: {entry['delta_x']:.2f}, Delta Y: {entry['delta_y']:.2f}")
+                print(f"Reflected data saved to {output_file}")
+
+                def update_command_paths(data):
+                    if isinstance(data, dict):
+                        if "type" in data and data["type"] == "path" and "data" in data and "pathName" in data["data"]:
+                            if data["data"]["pathName"] in path_names:
+                                data["data"]["pathName"] = f"{path_prefix}{data['data']['pathName']}"
+                        for key, value in data.items():
+                            update_command_paths(value)
+                    elif isinstance(data, list):
+                        for item in data:
+                            update_command_paths(item)
+
+                update_command_paths(flipped_commands)
+            else:
+                print(f"File {file_name} not found in paths folder.")
+
+        flipped_commands_file = f"{auto_name}.auto"
+        self.save_auto(flipped_commands, flipped_commands_file)
+        print(f"Flipped commands file saved to {flipped_commands_file}")
+
+    def reflect_points(self, json_data, ref_x, ref_y, reflect_x=True, reflect_y=True, reflect_rotation_x=True,
+                   reflect_rotation_y=True):
         reflected_data = json_data.copy()
 
         if "waypoints" in reflected_data:
@@ -85,7 +160,7 @@ class jsonInterpreter:
             for state_key in ["idealStartingState", "goalEndState"]:
                 if state_key in reflected_data and "rotation" in reflected_data[state_key]:
                     reflected_data[state_key]["rotation"] = -((reflected_data[state_key]["rotation"] + 180) % 360)
-    
+
             if "rotationTargets" in reflected_data:
                 for rotation_target in reflected_data["rotationTargets"]:
                     if "rotationDegrees" in rotation_target:
