@@ -1,0 +1,100 @@
+import customtkinter
+from customtkinter import filedialog
+import os
+from jsonInterpreter import jsonInterpreter
+
+customtkinter.set_appearance_mode("System")
+customtkinter.set_default_color_theme("blue")
+
+class App(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
+
+        self.backend = jsonInterpreter()
+
+        self.title("Auto Flipper 9000")
+        self.geometry(f"{1100}x{580}")
+
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure((2, 3), weight=0)
+        self.grid_rowconfigure((0, 1, 2), weight=1)
+
+        self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
+        self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
+        self.sidebar_frame.grid_rowconfigure(4, weight=1)
+
+        self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Auto Flipper\n9000", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
+
+        self.folder_input_label = customtkinter.CTkLabel(self.sidebar_frame, text="Current project:", anchor="w")
+        self.folder_input_label.grid(row=2, column=0, padx=20, pady=(10, 0))
+
+        if False:
+            self.project_label = customtkinter.CTkLabel(self.sidebar_frame, text="NONE", anchor="w", text_color="orange")
+        else:
+            self.project_label = customtkinter.CTkLabel(self.sidebar_frame, text="Not Selected", anchor="w", text_color="red")
+
+        self.project_label.grid(row=2, column=0, padx=20, pady=(50, 0))
+
+
+        self.folder_input_button = customtkinter.CTkButton(self.sidebar_frame, text="Open Project",
+                                                           command=self.open_file_dialog_event)
+        self.folder_input_button.grid(row=3, column=0, padx=20, pady=(10, 10))
+
+        self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
+        self.appearance_mode_label.grid(row=5, column=0, padx=20, pady=(10, 0))
+        self.appearance_mode_optionmenu = customtkinter.CTkOptionMenu(self.sidebar_frame,
+                                                                       values=["System", "Dark", "Light"],
+                                                                       command=self.change_appearance_mode_event)
+        self.appearance_mode_optionmenu.grid(row=6, column=0, padx=20, pady=(10, 20))
+
+
+        # create tabview
+        self.tabview = customtkinter.CTkTabview(self)
+        self.tabview.grid(row=0, column=1, rowspan = 3, padx=(20, 20), pady=(20, 0), sticky="nsew")
+        self.tabview.add("Autos")
+        self.tabview.add("Paths")
+        self.tabview.tab("Autos").grid_columnconfigure(0, weight=1)
+        self.tabview.tab("Autos").grid_rowconfigure(0, weight=1)
+        self.tabview.tab("Paths").grid_columnconfigure(0, weight=1)
+        self.tabview.tab("Paths").grid_rowconfigure(0, weight=1)
+
+
+        self.scrollable_frame = customtkinter.CTkScrollableFrame(self.tabview.tab("Autos"))
+        self.scrollable_frame.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
+        self.scrollable_frame.grid_columnconfigure((0, 1, 2), weight=1)
+        self.auton_widgets = []
+
+        iterator = 0
+        for auto in self.backend.getAutos():
+            switch = customtkinter.CTkSwitch(master=self.scrollable_frame, text=f"{auto}")
+            switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
+            self.auton_widgets.append(switch)
+            iterator += 1
+
+        self.entry = customtkinter.CTkEntry(self, placeholder_text="Search")
+        self.entry.grid(row=3, column=1, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
+
+    def open_file_dialog_event(self):
+        path = customtkinter.filedialog.askdirectory()
+        self.project_label.configure(text=os.path.basename(path), text_color="#17e321")
+        self.backend.setWorkingDirectory(path)
+        self.refresh_autos_event()
+
+    def change_appearance_mode_event(self, new_appearance_mode: str):
+        customtkinter.set_appearance_mode(new_appearance_mode)
+
+    def refresh_autos_event(self):
+        for widget in self.auton_widgets:
+            widget.destroy()
+        iterator = 0
+        for auto in self.backend.getAutos():
+            switch = customtkinter.CTkSwitch(master=self.scrollable_frame, text=f"{auto}")
+            switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
+            self.auton_widgets.append(switch)
+            iterator += 1
+
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
