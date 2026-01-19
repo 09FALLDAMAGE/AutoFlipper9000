@@ -184,19 +184,18 @@ class App(customtkinter.CTk):
                         self.auton_widgets.append(switch)
                         iterator += 1
         else:
-            # if len(self.backend.getPaths()) > 0:
-            #     for widget in self.path_widgets:
-            #         widget.destroy()
-            #
-            #     self.path_widgets = []
-            #     iterator = 0
-            #     for path in self.backend.getPaths():
-            #         if term in path:
-            #             switch = customtkinter.CTkSwitch(master=self.auto_scrollable_frame, text=f"{path}")
-            #             switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
-            #             self.path_widgets.append(switch)
-            #             iterator += 1
-            None
+            if len(self.backend.getPaths()) > 0:
+                for widget in self.path_widgets:
+                    widget.destroy()
+
+                self.path_widgets = []
+                iterator = 0
+                for path in self.backend.getPaths():
+                    if term.lower() in path.lower():
+                        switch = customtkinter.CTkSwitch(master=self.path_scrollable_frame, text=f"{path}")
+                        switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
+                        self.path_widgets.append(switch)
+                        iterator += 1
 
 
 if __name__ == "__main__":
