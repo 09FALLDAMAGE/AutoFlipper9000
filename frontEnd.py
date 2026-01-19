@@ -45,6 +45,17 @@ class App(customtkinter.CTk):
                                                            command=self.open_file_dialog_event)
         self.folder_input_button.grid(row=3, column=0, padx=20, pady=(10, 10))
 
+        self.x_switch = customtkinter.CTkSwitch(master=self.sidebar_frame, text="Flip x")
+        self.x_switch.grid(row=4, column=0, padx=10, pady=(70, 0))
+
+        self.y_switch = customtkinter.CTkSwitch(master=self.sidebar_frame, text="Flip y")
+        self.y_switch.grid(row=4, column=0, padx=10, pady=(140, 0))
+
+        self.flipper_9000_inator = customtkinter.CTkButton(self.sidebar_frame, text="Flip!",
+                                                   command=self.flip)
+        self.flipper_9000_inator.grid(row=4, column=0, padx=20, pady=(0, 0))
+
+
         self.help_button = customtkinter.CTkButton(self.sidebar_frame, text="Documentation",
                                                            command=self.open_docs)
         self.help_button.grid(row=5, column=0, padx=20, pady=(10, 50))
@@ -174,7 +185,7 @@ class App(customtkinter.CTk):
         self.searchbar.delete(0, len(self.searchbar.get()))
         self.search_items(None)
 
-    def search_items(self, none):
+    def search_items(self, event):
         tab = self.tabview.get()
         term = self.searchbar.get()
 
@@ -209,6 +220,10 @@ class App(customtkinter.CTk):
 
     def open_docs(self):
         webbrowser.open("https://github.com/09FALLDAMAGE/AutoFlipper9000/blob/main/README.md")
+
+    def flip(self):
+        dialog = customtkinter.CTkInputDialog(text="What should the new auto be named?\n(no more prefix bs)", title="Test")
+        print(dialog.get_input())
 
 
 if __name__ == "__main__":
