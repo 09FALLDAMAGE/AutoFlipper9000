@@ -140,7 +140,7 @@ class jsonInterpreter:
             else:
                 print(f"File {file_name} not found in paths folder.")
 
-        flipped_commands_file = f"{auto_name}.auto"
+        flipped_commands_file = f"{flip_auto_name}.auto"
         self.save_auto(flipped_commands, flipped_commands_file)
         print(f"Flipped commands file saved to {flipped_commands_file}")
 
