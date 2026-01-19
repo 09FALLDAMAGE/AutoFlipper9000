@@ -48,7 +48,7 @@ class jsonInterpreter:
             json.dump(settings, file, indent=4)
 
     def save_auto(self, data, output_file):
-        folder_path = "autos"
+        folder_path = "src\\main\\deploy\\pathplanner\\autos"
         file_path = os.path.join(self.working_directory, folder_path, output_file)
         with open(file_path, 'w') as file:
             json.dump(data, file, indent=4)
@@ -61,8 +61,22 @@ class jsonInterpreter:
         else:
             return ""
 
+    def find_deltas(self, json_data, ref_x, ref_y):
+        deltas = []
+
+        if "waypoints" in json_data:
+            for waypoint in json_data["waypoints"]:
+                for key in ["anchor", "prevControl", "nextControl"]:
+                    if key in waypoint and waypoint[key] is not None:
+                        x, y = waypoint[key]["x"], waypoint[key]["y"]
+                        delta_x = x - ref_x
+                        delta_y = y - ref_y
+                        deltas.append({"point": key, "x": x, "y": y, "delta_x": delta_x, "delta_y": delta_y})
+
+        return deltas
+
     def save_json(self, data, output_file):
-        folder_path = "paths"
+        folder_path = "src\\main\\deploy\\pathplanner\\paths"
         file_path = os.path.join(self.working_directory, folder_path, output_file)
         with open(file_path, 'w') as file:
             json.dump(data, file, indent=4)
@@ -81,15 +95,15 @@ class jsonInterpreter:
         return path_names
 
     def load_json(self, file_name):
-        folder_path = "paths"  # Folder where JSON files are stored
+        folder_path = "src\\main\\deploy\\pathplanner\\paths"  # Folder where JSON files are stored
         file_path = os.path.join(self.working_directory, folder_path, file_name)
         with open(file_path, 'r') as file:
             data = json.load(file)
         return data
 
-    def flip(self, auto_name, reflect_x=True, reflect_y=True, reflect_rotation_y=True,
+    def flip(self, auto_name, flip_auto_name, reflect_x=True, reflect_y=True, reflect_rotation_y=True,
                    reflect_rotation_x=True, path_prefix = ""):
-        with open(os.path.join(self.working_directory, "autos", auto_name), 'r') as file:
+        with open(os.path.join(self.working_directory, "src\\main\\deploy\\pathplanner\\autos", auto_name), 'r') as file:
             command_data = json.load(file)
 
         flipped_commands = command_data.copy()
@@ -99,7 +113,7 @@ class jsonInterpreter:
             file_name = f"{path_name}.path"
             output_file = f"{path_prefix}{path_name}.path"
 
-            if os.path.exists(os.path.join(self.working_directory, "paths", file_name)):
+            if os.path.exists(os.path.join(self.working_directory, "src\\main\\deploy\\pathplanner\\paths", file_name)):
                 json_data = self.load_json(file_name)
                 deltas = self.find_deltas(json_data, self.ref_x, self.ref_y)
                 reflected_data = self.reflect_points(json_data, self.ref_x, self.ref_y, reflect_x, reflect_y, reflect_rotation_x, reflect_rotation_y)

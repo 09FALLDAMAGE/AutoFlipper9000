@@ -228,12 +228,18 @@ class App(customtkinter.CTk):
         webbrowser.open("https://github.com/09FALLDAMAGE/AutoFlipper9000/blob/main/README.md")
 
     def flip(self):
-        flipx = self.x_switch.get()
-        flipy = self.y_switch.get()
-        fliprotx = self.x_rotation_switch.get()
-        fliproty = self.y_rotation_switch.get()
+        flipx = self.x_switch.get() == 1
+        flipy = self.y_switch.get() == 1
+        fliprotx = self.x_rotation_switch.get() == 1
+        fliproty = self.y_rotation_switch.get() == 1
         if self.tabview.get() == "Autos":
-            if True: # single auto
+            autons_to_flip = []
+            for auton_widget in self.auton_widgets:
+                if auton_widget.get() == 1:
+                    autons_to_flip.append(auton_widget.cget("text"))
+
+
+            if len(autons_to_flip) == 1: # single auto
                 auto_name_entry = customtkinter.CTkInputDialog(text="What should the name of the new auto be?",
                                                          title="Flipping, 30%")
                 auto_name = auto_name_entry.get_input()
@@ -250,9 +256,9 @@ class App(customtkinter.CTk):
                 # if command_name is None or command_name == "":
                 #     return
 
-                self.backend.flip("autoname",flipx, flipy, fliprotx, fliproty, path_prefix)
+                self.backend.flip(autons_to_flip[0], auto_name,flipx, flipy, fliprotx, fliproty, path_prefix)
 
-            elif False: # multiple autos
+            elif len(autons_to_flip) > 1: # multiple autos
                 auto_name = customtkinter.CTkInputDialog(
                     text="You are flipping multiple autos\nEnter a prefix for the new autos", title="Flipping, 30%")
                 print(auto_name.get_input())
