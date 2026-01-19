@@ -104,6 +104,7 @@ class App(customtkinter.CTk):
         self.searchbar = customtkinter.CTkEntry(self, placeholder_text="Press Enter To Search")
         self.searchbar.grid(row=3, column=1, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
         self.searchbar.bind('<Return>', self.search_items)
+        self.searchbar.bind('<Escape>', self.clear_search)
 
 
     def open_file_dialog_event(self):
@@ -164,7 +165,11 @@ class App(customtkinter.CTk):
             self.path_widgets.append(self.no_paths_label)
 
 
-    def search_items(self, tool):
+    def clear_search(self, entry):
+        self.searchbar.delete(0, len(self.searchbar.get()))
+        self.search_items(None)
+
+    def search_items(self, none):
         tab = self.tabview.get()
         term = self.searchbar.get()
 
