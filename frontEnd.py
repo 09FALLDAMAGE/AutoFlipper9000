@@ -92,18 +92,18 @@ class App(customtkinter.CTk):
             for auto in self.backend.getPaths():
                 switch = customtkinter.CTkSwitch(master=self.path_scrollable_frame, text=f"{auto}")
                 switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
-                self.auton_widgets.append(switch)
+                self.path_widgets.append(switch)
                 iterator += 1
         else:
             self.project_label.configure(text_color="orange")
             self.no_paths_label = customtkinter.CTkLabel(self.path_scrollable_frame, text="No Paths\n \nLoad the base folder\nof your robot project",
                                                      font=customtkinter.CTkFont(size=20, weight="bold"))
             self.no_paths_label.grid(row=0, column=1, padx=10, pady=(20, 10))
-            self.auton_widgets.append(self.no_paths_label)
+            self.path_widgets.append(self.no_paths_label)
 
-        self.searchbar = customtkinter.CTkEntry(self, placeholder_text="Search")
+        self.searchbar = customtkinter.CTkEntry(self, placeholder_text="Press Enter To Search")
         self.searchbar.grid(row=3, column=1, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
-        self.searchbar.bind('<Return>', self.search_autos)
+        self.searchbar.bind('<Return>', self.search_items)
 
 
     def open_file_dialog_event(self):
@@ -163,20 +163,40 @@ class App(customtkinter.CTk):
             self.no_paths_label.grid(row=0, column=1, padx=10, pady=(20, 10))
             self.path_widgets.append(self.no_paths_label)
 
-    def search_autos(self, tool):
-        term = self.searchbar.get()
-        if len(self.backend.getAutos()) > 0:
-            for widget in self.auton_widgets:
-                widget.destroy()
 
-            self.auton_widgets = []
-            iterator = 0
-            for auto in self.backend.getAutos():
-                if term in auto:
-                    switch = customtkinter.CTkSwitch(master=self.auto_scrollable_frame, text=f"{auto}")
-                    switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
-                    self.auton_widgets.append(switch)
-                    iterator += 1
+    def search_items(self, tool):
+        tab = self.tabview.get()
+        term = self.searchbar.get()
+
+        tab = tab == "Autos"
+
+        if tab:
+            if len(self.backend.getAutos()) > 0:
+                for widget in self.auton_widgets:
+                    widget.destroy()
+
+                self.auton_widgets = []
+                iterator = 0
+                for auto in self.backend.getAutos():
+                    if term.lower() in auto.lower():
+                        switch = customtkinter.CTkSwitch(master=self.auto_scrollable_frame, text=f"{auto}")
+                        switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
+                        self.auton_widgets.append(switch)
+                        iterator += 1
+        else:
+            # if len(self.backend.getPaths()) > 0:
+            #     for widget in self.path_widgets:
+            #         widget.destroy()
+            #
+            #     self.path_widgets = []
+            #     iterator = 0
+            #     for path in self.backend.getPaths():
+            #         if term in path:
+            #             switch = customtkinter.CTkSwitch(master=self.auto_scrollable_frame, text=f"{path}")
+            #             switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
+            #             self.path_widgets.append(switch)
+            #             iterator += 1
+            None
 
 
 if __name__ == "__main__":
