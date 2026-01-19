@@ -267,6 +267,8 @@ class App(customtkinter.CTk):
 
             else: # no autos
                 return
+            
+        self.search_items(None)
 
 
 
