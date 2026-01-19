@@ -7,7 +7,7 @@ class jsonInterpreter:
         self.auto_names = []
         self.path_names = []
         self.SETTINGS_FILE = "settings.json"
-        self.ref_x, self.ref_y = 8.77, 4.03
+        self.ref_x, self.ref_y = 8.27, 4.03
 
     def getAutos(self):
         if self.working_directory is not None:
