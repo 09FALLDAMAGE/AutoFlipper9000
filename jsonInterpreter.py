@@ -10,6 +10,7 @@ class jsonInterpreter:
 
     def getAutos(self):
         if self.working_directory is not None:
+            self.auto_names = []
             auto_directory = os.path.join(self.working_directory, "src\\main\\deploy\\pathplanner", "autos")
             if os.path.isdir(auto_directory):
                 for f in os.listdir(auto_directory):
@@ -24,6 +25,9 @@ class jsonInterpreter:
 
     def getPaths(self):
         if self.working_directory is not None:
+
+            self.path_names = []
+
             path_directory = os.path.join(self.working_directory, "src\\main\\deploy\\pathplanner", "paths")
             if os.path.isdir(path_directory):
                 for f in os.listdir(path_directory):
