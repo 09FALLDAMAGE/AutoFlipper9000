@@ -2,6 +2,7 @@ import customtkinter
 from customtkinter import filedialog
 import os
 from jsonInterpreter import jsonInterpreter
+import webbrowser
 
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("blue")
@@ -43,6 +44,10 @@ class App(customtkinter.CTk):
         self.folder_input_button = customtkinter.CTkButton(self.sidebar_frame, text="Open Project",
                                                            command=self.open_file_dialog_event)
         self.folder_input_button.grid(row=3, column=0, padx=20, pady=(10, 10))
+
+        self.help_button = customtkinter.CTkButton(self.sidebar_frame, text="Documentation",
+                                                           command=self.open_docs)
+        self.help_button.grid(row=4, column=0, padx=20, pady=(10, 10))
 
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
         self.appearance_mode_label.grid(row=5, column=0, padx=20, pady=(10, 0))
@@ -201,6 +206,9 @@ class App(customtkinter.CTk):
                         switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
                         self.path_widgets.append(switch)
                         iterator += 1
+
+    def open_docs(self):
+        webbrowser.open("https://github.com/09FALLDAMAGE/AutoFlipper9000/blob/main/README.md")
 
 
 if __name__ == "__main__":
