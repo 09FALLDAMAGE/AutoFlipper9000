@@ -187,7 +187,7 @@ class jsonInterpreter:
                    reflect_rotation_x=True):
 
 
-        file_name = f"{path_in}.path"
+        file_name = f"{path_in}"
         output_file = f"{new_path_name}.path"
 
         if os.path.exists(os.path.join(self.working_directory, "src\\main\\deploy\\pathplanner\\paths", file_name)):

@@ -269,7 +269,7 @@ class App(customtkinter.CTk):
                     return
 
                 for auton in autons_to_flip:
-                    self.backend.flip(auton, auto_name + auton, flipx, flipy, fliprotx, fliproty, path_prefix)
+                    self.backend.flip(auton, auto_name + auton.replace(".auto", ""), flipx, flipy, fliprotx, fliproty, path_prefix)
 
 
             else: # no autos
@@ -283,13 +283,18 @@ class App(customtkinter.CTk):
                     paths_to_flip.append(path_widget.cget("text"))
 
             if len(paths_to_flip) > 0:
+                print(paths_to_flip)
                 for path in paths_to_flip:
                     path_name_entry = customtkinter.CTkInputDialog(text=f"What should the new name of path {path} be?",
                                                                title="Flipping, 67%")
                     path_name = path_name_entry.get_input()
-                    if path_name is None or path_name == "":
-                        path_name = "flipped" + datetime.now() + path
-                    self.backend.flip_path(path, path_name, flipx, flipy, fliprotx, fliproty)
+                    if path_name is not None:
+                        if path_name == "":
+                            path_name = "flipped" + str(datetime.now().strftime("%Y%m%d_%H%M%S")) + path.replace(".path", "")
+                            print(path_name)
+                        print(path_name)
+                        self.backend.flip_path(path, path_name, flipx, flipy, fliprotx, fliproty)
+
 
 
 
