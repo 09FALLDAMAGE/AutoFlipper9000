@@ -43,13 +43,19 @@ class App(customtkinter.CTk):
 
         self.folder_input_button = customtkinter.CTkButton(self.sidebar_frame, text="Open Project",
                                                            command=self.open_file_dialog_event)
-        self.folder_input_button.grid(row=3, column=0, padx=20, pady=(10, 10))
+        self.folder_input_button.grid(row=3, column=0, padx=20, pady=(10, 0))
 
         self.x_switch = customtkinter.CTkSwitch(master=self.sidebar_frame, text="Flip x")
-        self.x_switch.grid(row=4, column=0, padx=10, pady=(70, 0))
+        self.x_switch.grid(row=4, column=0, padx=10, pady=(60, 0))
 
         self.y_switch = customtkinter.CTkSwitch(master=self.sidebar_frame, text="Flip y")
-        self.y_switch.grid(row=4, column=0, padx=10, pady=(140, 0))
+        self.y_switch.grid(row=4, column=0, padx=10, pady=(110, 0))
+
+        self.x_rotation_switch = customtkinter.CTkSwitch(master=self.sidebar_frame, text="Flip Rotation x")
+        self.x_rotation_switch.grid(row=4, column=0, padx=10, pady=(160, 0))
+
+        self.y_rotation_switch = customtkinter.CTkSwitch(master=self.sidebar_frame, text="Flip Rotation y")
+        self.y_rotation_switch.grid(row=4, column=0, padx=10, pady=(210, 0))
 
         self.flipper_9000_inator = customtkinter.CTkButton(self.sidebar_frame, text="Flip!",
                                                    command=self.flip)
@@ -58,7 +64,7 @@ class App(customtkinter.CTk):
 
         self.help_button = customtkinter.CTkButton(self.sidebar_frame, text="Documentation",
                                                            command=self.open_docs)
-        self.help_button.grid(row=5, column=0, padx=20, pady=(10, 50))
+        self.help_button.grid(row=5, column=0, padx=20, pady=(10, 10))
 
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
         self.appearance_mode_label.grid(row=6, column=0, padx=20, pady=(0, 0))
@@ -222,8 +228,41 @@ class App(customtkinter.CTk):
         webbrowser.open("https://github.com/09FALLDAMAGE/AutoFlipper9000/blob/main/README.md")
 
     def flip(self):
-        dialog = customtkinter.CTkInputDialog(text="What should the new auto be named?\n(no more prefix bs)", title="Test")
-        print(dialog.get_input())
+        flipx = self.x_switch.get()
+        flipy = self.y_switch.get()
+        if self.tabview.get() == "Autos":
+            if True: # single auto
+                auto_name_entry = customtkinter.CTkInputDialog(text="What should the name of the new auto be?",
+                                                         title="Flipping, 30%")
+                auto_name = auto_name_entry.get_input()
+                if auto_name is None or auto_name == "":
+                    return
+
+                path_prefix_entry = customtkinter.CTkInputDialog(text="Enter new path prefix", title="Flipping, 60%")
+                path_prefix = path_prefix_entry.get_input()
+                if path_prefix is None or path_prefix == "":
+                    return
+
+                command_name_entry = customtkinter.CTkInputDialog(text="Enter new command file prefix", title="Flipping, 90%")
+                command_name = command_name_entry.get_input()
+                if command_name is None or command_name == "":
+                    return
+
+            elif False: # multiple autos
+                auto_name = customtkinter.CTkInputDialog(
+                    text="You are flipping multiple autos\nEnter a prefix for the new autos", title="Flipping, 30%")
+                print(auto_name.get_input())
+                path_prefix = customtkinter.CTkInputDialog(text="Enter new path prefix", title="Flipping, 60%")
+                command_name = customtkinter.CTkInputDialog(text="Enter new command file prefix", title="Flipping, 90%")
+
+            else: # no autos
+                return
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
