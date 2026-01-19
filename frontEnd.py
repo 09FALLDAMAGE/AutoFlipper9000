@@ -47,14 +47,14 @@ class App(customtkinter.CTk):
 
         self.help_button = customtkinter.CTkButton(self.sidebar_frame, text="Documentation",
                                                            command=self.open_docs)
-        self.help_button.grid(row=4, column=0, padx=20, pady=(10, 10))
+        self.help_button.grid(row=5, column=0, padx=20, pady=(10, 50))
 
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
-        self.appearance_mode_label.grid(row=5, column=0, padx=20, pady=(10, 0))
+        self.appearance_mode_label.grid(row=6, column=0, padx=20, pady=(0, 0))
         self.appearance_mode_optionmenu = customtkinter.CTkOptionMenu(self.sidebar_frame,
                                                                        values=["System", "Dark", "Light"],
                                                                        command=self.change_appearance_mode_event)
-        self.appearance_mode_optionmenu.grid(row=6, column=0, padx=20, pady=(10, 20))
+        self.appearance_mode_optionmenu.grid(row=7, column=0, padx=20, pady=(10, 20))
 
 
         # create tabview
