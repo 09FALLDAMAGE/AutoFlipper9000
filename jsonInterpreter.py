@@ -6,6 +6,7 @@ class jsonInterpreter:
         # C:\\Users\\mayaj\\Robotics\\Reefscape\\src\\main\\deploy\\pathplanner
         self.working_directory = ""
         self.auto_names = []
+        self.SETTINGS_FILE = "settings.json"
 
     def getAutos(self):
         if self.working_directory is not None:
@@ -24,3 +25,11 @@ class jsonInterpreter:
 
     def setWorkingDirectory(self, directory):
         self.working_directory = directory
+
+    def getDefaultProjectDir(self):
+        if os.path.exists(self.SETTINGS_FILE):
+            with open(self.SETTINGS_FILE, 'r') as file:
+                self.working_directory = json.load(file)["default_project_path"]
+                return self.working_directory
+        else:
+            return ""

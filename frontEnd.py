@@ -29,8 +29,8 @@ class App(customtkinter.CTk):
         self.folder_input_label = customtkinter.CTkLabel(self.sidebar_frame, text="Current project:", anchor="w")
         self.folder_input_label.grid(row=2, column=0, padx=20, pady=(10, 0))
 
-        if False:
-            self.project_label = customtkinter.CTkLabel(self.sidebar_frame, text="NONE", anchor="w", text_color="orange")
+        if self.backend.getDefaultProjectDir() != "":
+            self.project_label = customtkinter.CTkLabel(self.sidebar_frame, text=os.path.basename(self.backend.getDefaultProjectDir()), anchor="w", text_color="orange")
         else:
             self.project_label = customtkinter.CTkLabel(self.sidebar_frame, text="Not Selected", anchor="w", text_color="red")
 
@@ -65,12 +65,18 @@ class App(customtkinter.CTk):
         self.scrollable_frame.grid_columnconfigure((0, 1, 2), weight=1)
         self.auton_widgets = []
 
-        iterator = 0
-        for auto in self.backend.getAutos():
-            switch = customtkinter.CTkSwitch(master=self.scrollable_frame, text=f"{auto}")
-            switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
-            self.auton_widgets.append(switch)
-            iterator += 1
+        if len(self.backend.getAutos()) > 0:
+            iterator = 0
+            for auto in self.backend.getAutos():
+                switch = customtkinter.CTkSwitch(master=self.scrollable_frame, text=f"{auto}")
+                switch.grid(row=int(iterator / 3), column=int(iterator % 3), padx=10, pady=(0, 20))
+                self.auton_widgets.append(switch)
+                iterator += 1
+        else:
+            self.no_items_label = customtkinter.CTkLabel(self.scrollable_frame, text="No Autos\n \nLoad the base folder\nof your robot project",
+                                                     font=customtkinter.CTkFont(size=20, weight="bold"))
+            self.no_items_label.grid(row=0, column=1, padx=10, pady=(20, 10))
+            self.auton_widgets.append(self.no_items_label)
 
         self.entry = customtkinter.CTkEntry(self, placeholder_text="Search")
         self.entry.grid(row=3, column=1, columnspan=2, padx=(20, 20), pady=(20, 20), sticky="nsew")
