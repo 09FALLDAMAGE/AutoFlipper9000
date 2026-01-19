@@ -1,6 +1,8 @@
 
 ## Welcome to the Autoflipper!
 The new graphical interface requires a bit more documentation than the last command-line based tool!
+## Installation
+Just download the single file executable from the releases tab to get started!
 ## Flipping autos
 To flip an auto, follow these steps
 
